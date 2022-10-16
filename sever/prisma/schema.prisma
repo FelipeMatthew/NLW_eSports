@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id        String @id @default(uuid()) // Chave primária
+  title     String
+  bannerUrl String
+
+  ads Ad[] // Um game pode ter vários anuncios
+}
+
+model Ad {
+  id              String   @id @default(uuid()) //Universal unic id
+  gameId          String
+  name            String
+  yearsPlaying    Int
+  discord         String
+  weekDays        String
+  hourStart       Int
+  hourEnd         Int
+  useVoiceChannel Boolean
+  createdAt       DateTime @default(now()) // Vai ser criado automaticamente assim que foi criado
+
+  game Game @relation(fields: [gameId], references: [id]) // o Ad vai estar dentro do game
+}
